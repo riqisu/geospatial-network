@@ -1,0 +1,89 @@
+\documentclass[onecolumn,aps,superscriptaddress,preprint]{revtex4}
+\usepackage{amsfonts}
+\usepackage{epsfig}
+\usepackage{amsmath,amssymb}
+\usepackage{times}
+\usepackage{xcolor}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\newcommand{\grad}{\ensuremath{^{\circ}}}
+
+\begin{document}
+
+\title{Description for Source Codes}
+
+\author{Ri-Qi Su}
+\affiliation{School of Electrical, Computer, and Energy
+Engineering, Arizona State University, Tempe, AZ 85287, USA}
+
+\author{Wen-Xu Wang}
+\affiliation{Department of Systems Science, School of
+Management and Center for Complexity Research,
+Beijing Normal University, Beijing 100875, China}
+
+\author{Xiao Wang} \email{xiaowang@asu.edu}
+\affiliation{School of Biological and Health Systems Engineering,
+Arizona State University, Tempe, AZ 85287, USA}
+
+\author{Ying-Cheng Lai}
+\affiliation{School of Electrical, Computer, and Energy
+Engineering, Arizona State University, Tempe, AZ 85287, USA}
+
+
+\maketitle
+
+To use the source codes, one need to have gcc complier and Matlab installed on a linux/unix system.
+Before simulation, open and edit the Bash script simulate.sh and specify the
+actual Matlab installing path in Line 12, and the predefined parameters from
+Line 15 to Line 21. Within these parameters, 'Stamp' refers to time stamp and is
+used specify different simulation realizations. 'Nodes' and 'Degree' refer to
+the network size and degree for generated scale-free networks. 'DataDef'
+specify the total sampling data point recorded from the time series generation
+code. The parameter 'NmDef' is list of normalized amount of required
+measurements, and 'EpsDef' is list of tolerance level in compressive sensing
+algorithm (see Method for detail description.) Both of these two parameters
+follow the definition of vector in Matlab. The 'RepTimeDef' defines the repeated
+realizations in network reconstruction.
+
+Then one may open a terminal and change directory to the file location, and change 
+permission for 'simulate.sh':
+	chmod +x ./simulate.sh
+and then execute it to perform simulation by
+	./simulate.sh  
+	
+The script will automatically generate a geospatial scale free network and 
+simulate time series for the coupled dynamics on it. It will also
+generate the Matlab code to reconstruct networks and geospatial information
+from simulated time series, store the reconstruction results in Matlab data storage
+format (*.mat file) and plot results by calling Matlab.
+
+The required source codes for this script and their functionalities are listed as follows.
+
+1. dataioV1.h is a header file written by Dr. Xuan Ni (http://chaos34.eas.asu.edu/) and revised 
+by Dr. Riqi Su. It provides functions in C programming environment to read and write 
+Matlab data storage format, to realize efficient data structure for matrix and vector, and to 
+generate high quality random variables.
+
+2. BANet.cpp was used to generate specific scale free random networks of given
+network sizes and average degrees.
+
+3. DDEv3.cpp was used to generate time series for Rossler oscillators with delayed
+coupled on given scale free networks. It will return a 'TimeSer*.mat' file.
+
+4. l1-magic codes located in directory /Optimization. The source codes were previously
+downloaded from http://users.ece.gatech.edu/justin/l1magic/ and they are used here 
+to solve the sparse regulation problem.
+
+5. localize2d.m was provided by A. H. Sayed et al.,  in Network-based Wireless Location, 
+IEEE Signal Processing Magazine, Vol. 24, No. 4, 2005. It is called by triLocation.m 
+to solve the triangle localization problem with given distance matrix.
+
+6. matlab_BANet.m is matlab code to reconstruct geospatial network from time series
+and was written by the authors.
+
+In the final stored *.mat file, there are some importance variables.
+The StoreCoup is the $W_{nz}$, which is the mean normalized errors for reconstructed 
+coupling weights of the existed links. The StoreDelay is $D_{nz}$, the mean normalized 
+errors for coupling delays of the existed links. And zStoreCoup and zStoreDelay are 
+$W_{z}$ and $D_{z}$, respectively, which are the average of absolute error for the weights
+or delays associated with non-existed links. Please refer to the Method section and 
+Figure 3 for detailed discussion.

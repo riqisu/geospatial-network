@@ -1,0 +1,111 @@
+\documentclass[onecolumn,aps,superscriptaddress,preprint]{revtex4}
+\usepackage{amsfonts}
+\usepackage{epsfig}
+\usepackage{amsmath,amssymb}
+\usepackage{times}
+\usepackage{xcolor}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\newcommand{\grad}{\ensuremath{^{\circ}}}
+
+\begin{document}
+
+\title{Description for Source Codes and Data}
+
+\author{Ri-Qi Su}
+\affiliation{School of Electrical, Computer, and Energy
+Engineering, Arizona State University, Tempe, AZ 85287, USA}
+
+\author{Wen-Xu Wang}
+\affiliation{Department of Systems Science, School of
+Management and Center for Complexity Research,
+Beijing Normal University, Beijing 100875, China}
+
+\author{Xiao Wang}
+\affiliation{School of Biological and Health Systems Engineering,
+Arizona State University, Tempe, AZ 85287, USA}
+
+\author{Ying-Cheng Lai} \email{Ying-Cheng.Lai@asu.edu}
+\affiliation{School of Electrical, Computer, and Energy
+Engineering, Arizona State University, Tempe, AZ 85287, USA}
+
+
+\maketitle
+
+To use the source codes, one need to have {\bf gcc} complier and {\bf Matlab}
+installed on a linux/unix based operator system. The test environment is Ubuntu
+{\it 14.04} with {\bf gcc} version {\it 4.9.2} and {\bf Matlab} version {\it
+8.4.0.150421}, on a personal PC powered by i7-2700 CPU and equipped with 32G
+memories. \\
+
+\noindent
+Before simulation, edit the Bash script {\bf simulate.sh} and specify the actual
+{\bf Matlab} instalation path in Line 12, together with the predefined
+parameters from Line 15 to Line 21. Within these parameters, {\bf {Stamp}}
+refers to time stamp and is used to specify different simulation realizations.
+{\bf Nodes} and {\bf Degree} refer to the network size and degree, respectively,
+for the generated scale-free networks. {\bf DataDef} specifies the total
+sampling data points collected from the generated time series. {\bf NmDef} is
+the list of $R_{m}$, which is the required measurement amount normalized by the
+number of total unknown parameters, and {\bf EpsDef} is the list of $\epsilon$,
+or the tolerance for compressive sensing algorithm (see Method for detail
+description.) Both of {\bf NmDef} and {\bf EpsDef} have to be written in the
+vector format defined in {\bf Matlab}. The {\bf RepTimeDef} defines the
+independent realizations in network reconstruction. \\
+
+\noindent
+Then one may open a terminal and change to the directory where the files locate, and change the
+permission for {\bf simulate.sh}: \\
+\indent	{\bf chmod +x ./simulate.sh} \\
+\noindent Now one can execute the Bash script to perform simulation using: \\
+\indent	{\bf ./simulate.sh } \\
+
+\noindent
+The script will automatically generate a geospatial scale free network and
+simulate time series for the coupled dynamics on it. It will also generate the
+{\bf Matlab} code to reconstruct networks and geospatial information from
+simulated time series, store the reconstruction results in {\bf Matlab} data
+storage format ( {\bf *.mat} file) and plot results by calling {\bf Matlab}.\\
+
+\noindent
+The required source codes for this script and their functionalities are listed as follows. \\
+\begin{enumerate}
+\item {\bf dataioV1.h} is a header file written by Dr. Xuan Ni (see
+http://chaos34.eas.asu.edu/) and revised by Dr. Riqi Su. It provides functions
+in C programming environment to read and write {\bf Matlab} data storage format,
+to realize efficient data structure for matrix and vector, and to generate high
+quality random variables.
+
+\item  {\bf BANet.cpp} was used to generate specific scale free random networks of given
+network sizes and average degrees.
+
+\item  {\bf DDEv3.cpp} was used to generate time series for Rossler oscillators with delayed
+coupled on given scale free networks. It will return a {\bf TimeSer*.mat} file.
+
+\item {\bf l1-magic} codes located in directory {\bf /Optimization}. The source
+codes were previously downloaded from
+http://users.ece.gatech.edu/justin/l1magic/ and they are used here to solve the
+sparse regulation problem. 
+
+\item {\bf localize2d.m} was provided by A. H. Sayed et al., in Network-based
+Wireless Location, {\it IEEE Signal Processing Magazine}, Vol. 24, No. 4, 2005.
+It is called by {\bf triLocation.m} to solve the triangle localization problem
+with given distance matrix.
+
+\item {\bf matlab\_BANet.m} is {\bf Matlab} code to reconstruct geospatial
+network from time series and was written by the authors.
+
+\end{enumerate}
+
+\noindent
+All the simulation results presented in this paper are given in {\bf
+*.mat} files. In the final stored {\bf *.mat} file, there are several importance variables.
+The {\bf StoreCoup} stores $W_{nz}$, which is the avarage normalized errors for
+reconstructed coupling weights of the existed links. The {\bf StoreDelay} stores
+$D_{nz}$, the average normalized errors for coupling delays of the existed
+links. And {\bf zStoreCoup} and {\bf zStoreDelay} represent $W_{z}$ and $D_{z}$,
+respectively, which are the average of absolute error for the weights or delays
+associated with non-existed links. Please refer to the Method section and Figure
+3 for detailed discussion.\\
+ 
+
+\end{document}

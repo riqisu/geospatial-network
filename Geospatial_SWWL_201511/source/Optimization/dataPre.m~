@@ -1,0 +1,6 @@
+%Noise;
+function [Xt, Yt, Zt, dXdt, dYdt, dZdt] = dataPre( TimeSer, NoiStr, RK_H)
+
+
+    
+    
